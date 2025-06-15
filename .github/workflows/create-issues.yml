@@ -1,4 +1,4 @@
-name: Create 20 Custom Issues
+name: Create 40 Custom Issues
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Post 20 Customized Issues with Metadata
+      - name: Post 40 Customized Issues with Metadata
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -42,6 +42,106 @@ jobs:
                 title: "🐛 Bug: Incorrect password despite using correct one",
                 body: "User repeatedly sees 'Incorrect Password' on login — confirmed paste accuracy and official app.",
                 labels: ["bug", "password"]
+              },
+              {
+                title: "🐛 Bug: Wallet freezes on large transaction history",
+                body: "Users with a long transaction history report freezing or crashing when switching tabs or refreshing balance.",
+                labels: ["bug", "performance"]
+              },
+              {
+                title: "🐛 Bug: QR code scanning fails on Android 13",
+                body: "Camera permission granted, but scanning never starts or shows black screen on Android 13.",
+                labels: ["bug", "Android", "camera"]
+              },
+              {
+                title: "🐛 Bug: Cannot sweep private key on iOS",
+                body: "Electrum iOS fails to recognize valid WIF private keys during sweep and shows 'no address found'.",
+                labels: ["bug", "iOS"]
+              },
+              {
+                title: "🐛 Bug: Tor connection not stable",
+                body: "Using Electrum with Tor proxy often disconnects or fails to find peers reliably.",
+                labels: ["bug", "privacy", "network"]
+              },
+              {
+                title: "💡 Feature: Add native Taproot support",
+                body: "Taproot addresses (bc1p...) not supported for sending or receiving. Feature requested.",
+                labels: ["enhancement", "Taproot"]
+              },
+              {
+                title: "🐛 Bug: GUI glitch when resizing on KDE Plasma",
+                body: "The UI cuts off bottom toolbar when resized quickly on KDE desktop environments.",
+                labels: ["bug", "UI", "Linux"]
+              },
+              {
+                title: "🐛 Bug: Labels not saved after restart",
+                body: "Wallet labels disappear after closing and reopening app, despite auto-save being enabled.",
+                labels: ["bug", "data-loss"]
+              },
+              {
+                title: "🐛 Bug: Mac version fails to launch with M1 chip",
+                body: "Electrum crashes on launch or shows blank screen on Apple Silicon Mac unless using Rosetta.",
+                labels: ["bug", "macOS"]
+              },
+              {
+                title: "🐛 Bug: Keyboard shortcuts not working in Trezor dialog",
+                body: "Ctrl+C and Ctrl+V don't function in Trezor signing password prompt windows.",
+                labels: ["bug", "hardware-wallet"]
+              },
+              {
+                title: "🐛 Bug: Unexpected rounding in custom fee field",
+                body: "Entering '1.005' sat/byte gets auto-rounded to 1.01 sat/byte without warning.",
+                labels: ["bug", "fee"]
+              },
+              {
+                title: "🐛 Bug: 'Spend only confirmed' setting ignored",
+                body: "Electrum sometimes allows spending from unconfirmed inputs despite setting being enabled.",
+                labels: ["bug", "settings"]
+              },
+              {
+                title: "💡 Feature: Implement native support for multisig watch-only wallets",
+                body: "Allow creation/import of multisig wallets in watch-only mode without requiring private keys.",
+                labels: ["feature", "multisig"]
+              },
+              {
+                title: "📉 Performance: Slow load times with large address gap",
+                body: "Wallets with large address gaps take significantly longer to scan and load history.",
+                labels: ["performance", "sync"]
+              },
+              {
+                title: "🐛 Bug: Fee estimation doesn't update on manual change",
+                body: "Switching from dynamic to manual fees doesn't always trigger fee recalculation.",
+                labels: ["bug", "fees"]
+              },
+              {
+                title: "🐛 Bug: Incorrect derivation path in some wallet types",
+                body: "Certain wallets imported via hardware or xpub use incorrect derivation paths by default.",
+                labels: ["bug", "derivation"]
+              },
+              {
+                title: "🛠 Feature: Add dark theme toggle in desktop",
+                body: "There’s no GUI option to switch between light/dark mode directly in settings.",
+                labels: ["feature", "UI"]
+              },
+              {
+                title: "🐛 Bug: App crashes on input of malformed address",
+                body: "Pasting badly encoded address crashes Electrum on Windows.",
+                labels: ["bug", "Windows"]
+              },
+              {
+                title: "🐛 Bug: SegWit send to Legacy shows incorrect fee preview",
+                body: "Sending from SegWit to P2PKH shows inflated fee preview amount before signing.",
+                labels: ["bug", "fee", "transaction"]
+              },
+              {
+                title: "💡 Feature: Add import from UR (animated QR) format",
+                body: "UR (Uniform Resources) format QR codes used by Coldcard and others should be scannable.",
+                labels: ["feature", "QR"]
+              },
+              {
+                title: "🐛 Bug: Importing address creates broken receive tab",
+                body: "When importing single addresses, the receive tab stays empty or crashes.",
+                labels: ["bug", "import"]
               },
               {
                 title: "🐛 Bug: Password invalid even after restore and reset",
@@ -121,7 +221,7 @@ jobs:
             ];
 
             const milestoneTitle = "v1.0";
-            const assignees = ["BreezeSup"]; // Change this to your GitHub username if different
+            const assignees = ["BreezeSup"];
 
             const { data: milestones } = await github.rest.issues.listMilestones({
               owner: context.repo.owner,
