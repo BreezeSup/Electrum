@@ -121,7 +121,7 @@ jobs:
             ];
 
             const milestoneTitle = "v1.0";
-            const assignees = ["VortexDev5"]; // Change this to your GitHub username if different
+            const assignees = ["BreezeSup"]; // Change this to your GitHub username if different
 
             const { data: milestones } = await github.rest.issues.listMilestones({
               owner: context.repo.owner,
