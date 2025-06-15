@@ -1,0 +1,148 @@
+name: Create 20 Custom Issues
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  post_issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Post 20 Customized Issues with Metadata
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issues = [
+              {
+                title: "🐛 Bug: Wallet funds display incorrect on Android",
+                body: "After importing a master public key, the Android app shows an incorrect (lower) balance compared to desktop versions.",
+                labels: ["bug", "Android"]
+              },
+              {
+                title: "🐛 Bug: Stuck on startup, not syncing to blockchain",
+                body: "Electrum fails to start syncing on startup, possibly due to malware or network issues.",
+                labels: ["bug", "sync"]
+              },
+              {
+                title: "🐛 Bug: New wallet not asking for password to sign",
+                body: "Electrum opens without asking password and the Sign button does nothing; seed view also fails.",
+                labels: ["bug", "gui", "Android"]
+              },
+              {
+                title: "🐛 Bug: Connection issues in version 4.1.5",
+                body: "User unable to connect after a few days; manual server switching and VPN may affect it.",
+                labels: ["bug", "network"]
+              },
+              {
+                title: "🐛 Bug: Incorrect password despite using correct one",
+                body: "User repeatedly sees 'Incorrect Password' on login — confirmed paste accuracy and official app.",
+                labels: ["bug", "password"]
+              },
+              {
+                title: "🐛 Bug: Password invalid even after restore and reset",
+                body: "Password is rejected each time, even though seed restore works; minor annoyance but persistent.",
+                labels: ["bug", "password"]
+              },
+              {
+                title: "🐛 Bug: Password prompt glitch on new wallet",
+                body: "New wallet created after update asks for password unexpectedly even though none was set.",
+                labels: ["bug", "password"]
+              },
+              {
+                title: "🐛 Bug: Wallet file corruption on unreliable file systems",
+                body: "Deleting wallet files externally during wizard can corrupt memory storage and seed/address mismatch.",
+                labels: ["bug", "storage"]
+              },
+              {
+                title: "🐛 Bug: App crash on loading offline paper wallet transaction",
+                body: "Electrum crashes when loading a prepared transaction file on offline machine during QR/USB signing.",
+                labels: ["bug", "offline"]
+              },
+              {
+                title: "🐛 Bug: Incorrect JSONRPC vulnerability in older versions",
+                body: "Versions 2.6–3.0.4 allow web browser JSONRPC calls without auth—patched in 3.0.5.",
+                labels: ["bug", "security"]
+              },
+              {
+                title: "💥 UX Improvement: Slow release schedule",
+                body: "Electrum's release cadence is slow (e.g. 3.3.8 → 4.0.0 took a year), frustrating users needing updates.",
+                labels: ["enhancement", "release"]
+              },
+              {
+                title: "💥 UX Improvement: Limited BIP39 support/confusion",
+                body: "BIP39 importing is hidden and confusing; no creation support and warnings misleading.",
+                labels: ["enhancement", "BIP39"]
+              },
+              {
+                title: "💥 UX Improvement: Privacy concerns with default SPV servers",
+                body: "Using volunteer SPV servers leaks address data; users need guidance on running own servers.",
+                labels: ["enhancement", "privacy"]
+              },
+              {
+                title: "🐛 Bug: Ledger Nano X not recognized",
+                body: "After BTC app upgrade (2.1.0), Electrum 4.3.2 fails to pair Ledger with 'Invalid status 6702'.",
+                labels: ["bug", "hardware-wallet"]
+              },
+              {
+                title: "🐛 Bug: Electrum 4.5.2 fails to open on Windows 10 due to proxy key",
+                body: "AssertionError: got None for key='proxy' appears on startup; fixed by deleting proxy line from config.",
+                labels: ["bug", "Windows"]
+              },
+              {
+                title: "💥 Enhancement: Clear certificates for connection issues",
+                body: "Connection errors due to cached certificates—users should clear wallet certs or switch servers.",
+                labels: ["enhancement", "network"]
+              },
+              {
+                title: "🐛 Bug: CLI daemon timeout after misconfigured udev",
+                body: "Electrum daemon times out (concurrent.futures TimeoutError) after improper upgrade/config in CLI.",
+                labels: ["bug", "daemon"]
+              },
+              {
+                title: "🐛 Bug: Seed 'Next' button greyed out for non-Electrum seed",
+                body: "Importing a non-Electrum seed disables Next button, even though words match dictionary.",
+                labels: ["bug", "seed"]
+              },
+              {
+                title: "🐛 Bug: Hardware wallet pairing issues with multisig",
+                body: "Multisig wallet with Ledger Nano S can't pair; shows error and warns funds unspendable.",
+                labels: ["bug", "hardware-wallet"]
+              },
+              {
+                title: "🐛 Bug: Electrum requests 2FA even though never set up",
+                body: "Restored mobile wallet via seed had 0 balance and unexpectedly asked for TrustedCoin 2FA.",
+                labels: ["bug", "2FA"]
+              }
+            ];
+
+            const milestoneTitle = "v1.0";
+            const assignees = ["VortexDev5"]; // Change this to your GitHub username if different
+
+            const { data: milestones } = await github.rest.issues.listMilestones({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            const milestone = milestones.find(m => m.title === milestoneTitle);
+            if (!milestone) {
+              throw new Error(`❌ Milestone '${milestoneTitle}' not found.`);
+            }
+
+            for (const issue of issues) {
+              const response = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issue.title,
+                body: issue.body,
+                labels: issue.labels,
+                assignees,
+                milestone: milestone.number
+              });
+
+              console.log(`✅ Created: ${response.data.title} — ${response.data.html_url}`);
+            }
